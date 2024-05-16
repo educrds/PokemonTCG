@@ -52,9 +52,7 @@
           class="text-xs leading-5 text-gray-600 text-ellipsis overflow-hidden"
         >
           {{
-            pokemon.abilities[0].text.length > 255
-              ? pokemon.abilities[0].text.slice(0, 255) + '...'
-              : pokemon.abilities[0].text
+            pokemon.abilities[0].text | truncate:255
           }}
         </p>
       </div>
