@@ -1,0 +1,29 @@
+<div class="w-full mb-2">
+  @if(pokemon.weaknesses){
+  <div class="w-full">
+    <div class="flex flex-col justify-center">
+      <dt
+        class="mb-1 flex items-center justify-between w-full text-sm font-semibold text-gray-500"
+      >
+        <span class="font-semibold text-gray-600"
+          >Weakness ({{ pokemon.weaknesses[0].type }})</span
+        >
+        <span class="font-semibold text-gray-400">{{
+          pokemon.weaknesses[0].value
+        }}</span>
+      </dt>
+    </div>
+  </div>
+  } @if(pokemon.attacks){
+  <div class="w-full">
+    <div class="flex flex-col justify-center">
+      <dt class="mb-1 flex items-center justify-between w-full text-sm">
+        <span class="font-semibold text-gray-600">Attack Damage</span>
+        <span class="font-semibold text-gray-400">{{
+          pokemon.attacks[0].damage || "Não informado"
+        }}</span>
+      </dt>
+    </div>
+  </div>
+  }
+</div>
