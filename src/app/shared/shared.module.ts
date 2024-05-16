@@ -8,6 +8,7 @@ import { NewCardComponent } from './components/new-card/new-card.component';
 import { PokemonCardComponent } from './components/pokemon-card/pokemon-card.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
+import { InfiniteScrollDirective } from './directives/infinite-scroll.directive';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     PokemonCardComponent,
     LoadingSpinnerComponent,
     TruncatePipe,
+    InfiniteScrollDirective
   ],
   exports: [
     NavbarComponent,
@@ -28,6 +30,7 @@ import { TruncatePipe } from './pipes/truncate.pipe';
     NewCardComponent,
     PokemonCardComponent,
     LoadingSpinnerComponent,
+    InfiniteScrollDirective
   ],
   imports: [CommonModule],
 })

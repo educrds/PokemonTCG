@@ -2,7 +2,6 @@ import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Directive({
   selector: '[infiniteScroll]',
-  standalone: true,
 })
 export class InfiniteScrollDirective {
   @Output() scrolledToBottom = new EventEmitter<void>();
