@@ -9,6 +9,9 @@ import { PokemonCardComponent } from './components/pokemon-card/pokemon-card.com
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { InfiniteScrollDirective } from './directives/infinite-scroll.directive';
+import { PokemonCardHeaderComponent } from './components/pokemon-card/pokemon-card-header/pokemon-card-header.component';
+import { PokemonCardBodyComponent } from './components/pokemon-card/pokemon-card-body/pokemon-card-body.component';
+import { PokemonCardFooterComponent } from './components/pokemon-card/pokemon-card-footer/pokemon-card-footer.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,9 @@ import { InfiniteScrollDirective } from './directives/infinite-scroll.directive'
     CardComponent,
     NewCardComponent,
     PokemonCardComponent,
+    PokemonCardHeaderComponent,
+    PokemonCardBodyComponent,
+    PokemonCardFooterComponent,
     LoadingSpinnerComponent,
     TruncatePipe,
     InfiniteScrollDirective
@@ -29,6 +35,9 @@ import { InfiniteScrollDirective } from './directives/infinite-scroll.directive'
     CardComponent,
     NewCardComponent,
     PokemonCardComponent,
+    PokemonCardHeaderComponent,
+    PokemonCardBodyComponent,
+    PokemonCardFooterComponent,
     LoadingSpinnerComponent,
     InfiniteScrollDirective
   ],
