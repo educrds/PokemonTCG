@@ -7,6 +7,7 @@ import { CardComponent } from './components/card/card.component';
 import { NewCardComponent } from './components/new-card/new-card.component';
 import { PokemonCardComponent } from './components/pokemon-card/pokemon-card.component';
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
+import { TruncatePipe } from './pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     CardComponent,
     NewCardComponent,
     PokemonCardComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    TruncatePipe,
   ],
   exports: [
     NavbarComponent,
@@ -25,10 +27,8 @@ import { LoadingSpinnerComponent } from './components/loading-spinner/loading-sp
     CardComponent,
     NewCardComponent,
     PokemonCardComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
   ],
-  imports: [
-    CommonModule,
-  ],
+  imports: [CommonModule],
 })
-export class SharedModule { }
+export class SharedModule {}
