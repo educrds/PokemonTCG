@@ -5,6 +5,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { ButtonComponent } from './components/button/button.component';
 import { CardComponent } from './components/card/card.component';
 import { NewCardComponent } from './components/new-card/new-card.component';
+import { PokemonCardComponent } from './components/pokemon-card/pokemon-card.component';
+import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 
 @NgModule({
   declarations: [
@@ -12,14 +14,18 @@ import { NewCardComponent } from './components/new-card/new-card.component';
     HeaderComponent,
     ButtonComponent,
     CardComponent,
-    NewCardComponent
+    NewCardComponent,
+    PokemonCardComponent,
+    LoadingSpinnerComponent
   ],
   exports: [
     NavbarComponent,
     HeaderComponent,
     ButtonComponent,
     CardComponent,
-    NewCardComponent
+    NewCardComponent,
+    PokemonCardComponent,
+    LoadingSpinnerComponent
   ],
   imports: [
     CommonModule,
