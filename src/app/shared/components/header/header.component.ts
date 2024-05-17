@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -7,5 +8,11 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input() title: string = '';
-  @Input() backRoute: boolean = false;
+  @Input() isBackRoute: boolean = false;
+
+  constructor(private _location: Location) {}
+
+  protected backRoute(): void {
+    this._location.back();
+  }
 }
