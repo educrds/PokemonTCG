@@ -6,7 +6,8 @@ import { CommonModule } from '@angular/common';
 import { Util } from '../../shared/utils';
 import { FormsModule } from '@angular/forms';
 import { MyPackTableComponent } from '../../shared/components/my-pack-table/my-pack-table.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Pack } from '../../core/interfaces/Pack';
 @Component({
   selector: 'app-novo-baralho',
   standalone: true,
@@ -16,17 +17,30 @@ import { Router } from '@angular/router';
 })
 export class NovoBaralhoComponent implements OnInit {
   private _currentPage: number = 1;
+  private _id: number | null = null;
 
   protected pokemonsList: Pokemon[] = [];
   protected myPokemonList = signal<Pokemon[]>([]);
   protected packName = signal<string>('');
 
-  constructor(
-    private _pokemonService: PokemonService,
-    private _router: Router
-  ) {}
+  constructor(private _pokemonService: PokemonService, private _router: Router, private _route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this._id = +this._route.snapshot.queryParams['id'];
+
+    if (this._id) {
+      const allPacks = this.getCardsFromLocalStorage();
+      const cardById = allPacks.find((card) => card.index === this._id);
+      
+      if (cardById) {
+        const { name, items } = cardById;
+
+        this.packName.set(name);
+        this.myPokemonList.update(() => {
+          return [...items];
+        });
+      }
+    }
     this.loadPokemons();
   }
 
@@ -39,14 +53,11 @@ export class NovoBaralhoComponent implements OnInit {
       });
   }
 
-  // service para salvar dados no localStorage
-
   protected addPokemonToPack(pokemon: Pokemon) {
     if (this._validateQtdPokemons(pokemon) && this._validateQtdMax()) {
       this.myPokemonList.update((values) => {
         return [...values, pokemon];
       });
-
       Util.showAlert(`Pokémon <strong>${pokemon.name}</strong> adicionado com sucesso!`);
     }
   }
@@ -73,7 +84,6 @@ export class NovoBaralhoComponent implements OnInit {
 
   private _validateQtdPokemons(pokemon: Pokemon): boolean {
     const errorMessage = `O baralho já possui <strong>4 cartas</strong> de mesmo nome: <strong>${pokemon.name}</strong>.`;
-
     const qtdOccurrences = this.myPokemonList().filter((item) => item.name === pokemon.name).length;
 
     if (qtdOccurrences === 4) {
@@ -84,27 +94,50 @@ export class NovoBaralhoComponent implements OnInit {
   }
 
   protected savePack() {
+    const packName = this.packName();
+
+    if (!packName) {
+      return Util.showAlert(`Insira um nome para o baralho.`);
+    }
+
     if (this._validateQtdMin()) {
-      this._storeInLocalStorage();
+      this._id ? this.updatePackInLocalStorage() : this.storePackInLocalStorage();
     }
   }
 
-  private _storeInLocalStorage(): void {
-    const key = this.packName();
-    const uIndex = Date.now();
+  private getCardsFromLocalStorage(): Pack[] {
+    const existingCards = localStorage.getItem('cards');
+    let cardsArray: Pack[] = existingCards ? JSON.parse(existingCards) : [];
+    return cardsArray;
+  }
 
-    if (key) {
-      const existingCards = localStorage.getItem('cards');
-      let cardsArray: any[] = existingCards ? JSON.parse(existingCards) : [];
-      cardsArray.push({ name: key, index: uIndex, items: this.myPokemonList() });
-      
+  private updatePackInLocalStorage(): void {
+    const packName = this.packName();
+    const cardsArray = this.getCardsFromLocalStorage();
+    const existingPackIndex = cardsArray.findIndex((pack) => pack.index === this._id);
+
+    if (existingPackIndex !== -1) {
+      cardsArray[existingPackIndex].items = this.myPokemonList();
+      cardsArray[existingPackIndex].name = packName;
       localStorage.setItem('cards', JSON.stringify(cardsArray));
-
-      Util.showAlert(`Baralho armazenado com o nome de <br> <strong>${this.packName()}</strong>`);
-      this._router.navigate(['/']);
-    } else {
-      Util.showAlert(`Insira um nome para o baralho.`);
+      Util.showAlert(`Baralho atualizado com sucesso!`);
+      this.navigateToHome();
     }
+  }
+
+  private storePackInLocalStorage(): void {
+    const packName = this.packName();
+    const uniqueIndex = Date.now();
+    const cardsArray = this.getCardsFromLocalStorage();
+
+    cardsArray.push({ name: packName, index: uniqueIndex, items: this.myPokemonList() });
+    localStorage.setItem('cards', JSON.stringify(cardsArray));
+    Util.showAlert(`Baralho inserido com sucesso!`);
+    this.navigateToHome();
+  }
+
+  private navigateToHome(): void {
+    this._router.navigate(['/']);
   }
 
   protected loadMore(): void {
