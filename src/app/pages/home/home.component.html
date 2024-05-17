@@ -1,12 +1,12 @@
 <div class="min-h-full">
   <app-navbar />
   <app-header [title]="'Meus Baralhos'" />
-
   <main>
     <div class="mx-auto py-6 sm:px-6 lg:px-8">
-      <!-- add baralho -->
-      <div class="grid grid-cols-4 gap-4">
-        <app-card />
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-2">
+        @for (card of myCards; track card.index) {
+          <app-card [item]="card" />
+        }
         <app-new-card />
       </div>
     </div>
