@@ -1,0 +1,70 @@
+<igx-grid [data]="data" height="435px">
+  <igx-column
+    field="images.small"
+    header="Card"
+    [width]="'8%'"
+    [filterable]="false"
+  >
+    <ng-template igxCell let-cell="cell">
+      <a [href]="cell.value" target="_blank">
+        <img [src]="cell.value" />
+      </a>
+    </ng-template>
+  </igx-column>
+  <igx-column
+    field="name"
+    header="Nome"
+    [width]="'15%'"
+    dataType="string"
+    [hasSummary]="true"
+  ></igx-column>
+  <igx-column field="hp" header="HP" dataType="number"></igx-column>
+  <igx-column
+    field="supertype"
+    header="Supertype"
+    dataType="string"
+  ></igx-column>
+  <igx-column field="level" header="Level" dataType="number">
+    <ng-template igxCell let-cell="cell">
+      <strong> {{ cell.row.data.level || "-" }} </strong>
+    </ng-template>
+  </igx-column>
+  <igx-column field="rarity" header="Rarity" dataType="string">
+    <ng-template igxCell let-cell="cell">
+      <strong> {{ cell.row.data.rarity || "-" }} </strong>
+    </ng-template>
+  </igx-column>
+  <igx-column field="types" header="Types">
+    <ng-template igxCell let-cell="cell">
+      <div class="flex gap-1" *ngFor="let item of cell.row.data.types">
+        <strong>{{ item }}</strong>
+      </div>
+    </ng-template>
+  </igx-column>
+  <igx-column field="weaknesses" header="Weaknesses">
+    <ng-template igxCell let-cell="cell">
+      <div
+        class="flex flex-col gap-1"
+        *ngFor="let item of cell.row.data.weaknesses"
+      >
+        <span><strong>Type:</strong> {{ item.type }}</span>
+        <span><strong>Value:</strong> {{ item.value }}</span>
+      </div>
+    </ng-template>
+  </igx-column>
+
+  <igx-grid>
+    <igx-action-strip #actionstrip>
+      <igx-grid-pinning-actions></igx-grid-pinning-actions>
+      <button
+        title="Delete"
+        igxIconButton="flat"
+        igxRipple
+        *ngIf="!isDeleted(actionstrip.context)"
+        (click)="actionstrip.context.delete()"
+      >
+        <igx-icon>delete</igx-icon>
+      </button>
+    </igx-action-strip>
+  </igx-grid>
+</igx-grid>
