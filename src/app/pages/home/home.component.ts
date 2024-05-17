@@ -16,6 +16,12 @@ export class HomeComponent implements OnInit {
     this.getFromLocalStorage();
   }
 
+  deletePack(index: number): void {
+    // Remove o item correspondente do localStorage
+    this.myCards = this.myCards.filter(card => card.index !== index);
+    localStorage.setItem('cards', JSON.stringify(this.myCards));
+  }
+
   private getFromLocalStorage(): void {
     const cards = localStorage.getItem("cards");
     if(cards){
