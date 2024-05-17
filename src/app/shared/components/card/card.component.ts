@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Pack } from '../../../core/interfaces/Pack';
 import { Router } from '@angular/router';
 import { Pokemon } from '../../../core/interfaces/Pokemon';
@@ -10,6 +10,7 @@ import { Pokemon } from '../../../core/interfaces/Pokemon';
 })
 export class CardComponent implements OnInit {
   @Input() item!: Pack;
+  @Output() deleteClicked = new EventEmitter<number>();
 
   protected uniqueTypes: string[] = [];
   protected totalTrainers: number = 0;
@@ -30,7 +31,7 @@ export class CardComponent implements OnInit {
   }
 
   protected deletePack(index: number) {
-    this._router.navigate(['/novo-baralho']);
+    this.deleteClicked.emit(index);
   }
 
   // Metódo para obter total de cartas no baralho por supertype
