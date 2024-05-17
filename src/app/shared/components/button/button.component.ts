@@ -1,5 +1,4 @@
-import { Location } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -8,10 +7,10 @@ import { Component, Input } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() label: string = '';
+  @Input() buttonType: 'primary' | 'outline' = 'primary';
+  @Output() cardClicked = new EventEmitter<void>();
 
-  constructor(private _location: Location) {}
-
-  protected backRoute():void {
-    this._location.back();
+  protected onClick(): void {
+    this.cardClicked.emit();
   }
 }
