@@ -28,7 +28,12 @@
     </div>
     } @if(pokemon.supertype){
     <div
-      class="inline-flex gap-0.5 items-center bg-purple-400 text-gray-100 text-xs font-medium px-1.5 py-0.5 rounded"
+      [ngClass]="
+        pokemon.supertype === 'Pokémon'
+          ? 'bg-purple-400 text-gray-200'
+          : 'bg-orange-400 text-white'
+      "
+      class="inline-flex gap-0.5 items-center text-xs font-medium px-1.5 py-0.5 rounded"
     >
       {{ pokemon.supertype }}
     </div>
