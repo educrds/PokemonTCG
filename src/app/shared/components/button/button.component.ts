@@ -1,5 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
+type ButtonType = 'primary' | 'outline' | 'success';
+
 @Component({
   selector: 'app-button',
   templateUrl: './button.component.html',
@@ -7,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ButtonComponent {
   @Input() label: string = '';
-  @Input() buttonType: 'primary' | 'outline' = 'primary';
+  @Input() buttonType: ButtonType = 'primary';
   @Output() cardClicked = new EventEmitter<void>();
 
   protected onClick(): void {

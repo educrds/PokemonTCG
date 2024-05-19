@@ -1,10 +1,8 @@
 <button
   (click)="onClick()"
   type="button"
-  [ngClass]="{
-    'bg-gray-700 hover:bg-gray-800 text-gray-300': buttonType === 'primary',
-     'hover:text-gray-500 border border-gray-300 hover:bg-gray-300 text-gray-700': buttonType === 'outline'}"
-  class="inline-flex gap-1 items-center focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-md text-sm px-4 py-2 text-center"
+  class="btn"
+  [ngClass]="{ 'btn-primary': buttonType === 'primary', 'btn-outline': buttonType === 'outline', 'btn-success': buttonType === 'success' }"
 >
   <ng-content></ng-content>
   {{ label }}
