@@ -1,4 +1,5 @@
 import Swal from 'sweetalert2';
+import { Pack } from '../../core/interfaces/Pack';
 
 export class Util {
   static showAlert(message: string) {
@@ -11,5 +12,11 @@ export class Util {
       showConfirmButton: false,
       html: message,
     });
+  }
+
+  static getCardsFromLocalStorage(): Pack[] {
+    const existingCards = localStorage.getItem('cards');
+    let cardsArray: Pack[] = existingCards ? JSON.parse(existingCards) : [];
+    return cardsArray;
   }
 }
