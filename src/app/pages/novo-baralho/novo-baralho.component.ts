@@ -8,20 +8,21 @@ import { FormsModule } from '@angular/forms';
 import { MyPackTableComponent } from '../../shared/components/my-pack-table/my-pack-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { FormInputComponent } from '../../shared/components/form-input/form-input.component';
 
 @Component({
   selector: 'app-novo-baralho',
   standalone: true,
-  imports: [SharedModule, CommonModule, FormsModule, MyPackTableComponent],
+  imports: [SharedModule, CommonModule, FormsModule, MyPackTableComponent, FormInputComponent],
   templateUrl: './novo-baralho.component.html',
   styleUrl: './novo-baralho.component.scss',
 })
 
 export class NovoBaralhoComponent implements OnInit, OnDestroy {
-  private _id: number | null = null;
   private _subscription!: Subscription;
   private _currentPage: WritableSignal<number> = signal<number>(1);
-
+  
+  protected id: number | null = null;
   protected myPokemonList: WritableSignal<Pokemon[]> = signal<Pokemon[]>([]);
   protected packName: WritableSignal<string> = signal<string>('');
   protected pokemonsList: Pokemon[] = [];
@@ -33,11 +34,11 @@ export class NovoBaralhoComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this._id = +this._route.snapshot.queryParams['id'];
+    this.id = +this._route.snapshot.queryParams['id'];
 
-    if (this._id) {
+    if (this.id) {
       const allPacks = Util.getCardsFromLocalStorage();
-      const cardById = allPacks.find((card) => card.index === this._id);
+      const cardById = allPacks.find((card) => card.index === this.id);
 
       if (cardById) {
         const { name, items } = cardById;
@@ -76,7 +77,6 @@ export class NovoBaralhoComponent implements OnInit, OnDestroy {
     }
   }
 
-  
   /**
      * Valida se o baralho já atingiu a quantidade máxima de 60 cartas.
      * @returns `true` se a quantidade máxima não foi atingida, caso contrário `false`.
@@ -127,7 +127,7 @@ export class NovoBaralhoComponent implements OnInit, OnDestroy {
     }
 
     if (this._validateQtdMin()) {
-      this._id ? this.updatePackInLocalStorage() : this.storePackInLocalStorage();
+      this.id ? this.updatePackInLocalStorage() : this.storePackInLocalStorage();
     }
   }
 
@@ -138,7 +138,7 @@ export class NovoBaralhoComponent implements OnInit, OnDestroy {
   */
   private updatePackInLocalStorage(): void {
     const cardsArray = Util.getCardsFromLocalStorage();
-    const existingPackIndex = cardsArray.findIndex((pack) => pack.index === this._id);
+    const existingPackIndex = cardsArray.findIndex((pack) => pack.index === this.id);
 
     if (existingPackIndex !== -1) {
       cardsArray[existingPackIndex].items = this.myPokemonList();
