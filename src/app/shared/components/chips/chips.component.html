@@ -1,0 +1,12 @@
+<div
+  class="chip"
+  [ngClass]="{
+    blue: chipType === 'blue',
+    purple: chipType === 'purple',
+    orange: chipType === 'orange',
+    red: chipType === 'red',
+    yellow: chipType === 'yellow',
+  }"
+>
+  <ng-content></ng-content> {{ label }}
+</div>
