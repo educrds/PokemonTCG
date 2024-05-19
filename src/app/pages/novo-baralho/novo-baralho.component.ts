@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Signal, WritableSignal, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { PokemonService } from '../../core/services/pokemon.service';
 import { Pokemon } from '../../core/interfaces/Pokemon';
@@ -18,13 +18,13 @@ import { Subscription } from 'rxjs';
 })
 
 export class NovoBaralhoComponent implements OnInit, OnDestroy {
-  private _currentPage: WritableSignal<number> = signal<number>(1);
   private _id: number | null = null;
   private _subscription!: Subscription;
+  private _currentPage: WritableSignal<number> = signal<number>(1);
 
-  protected pokemonsList: Pokemon[] = [];
   protected myPokemonList: WritableSignal<Pokemon[]> = signal<Pokemon[]>([]);
   protected packName: WritableSignal<string> = signal<string>('');
+  protected pokemonsList: Pokemon[] = [];
 
   constructor(
     private _pokemonService: PokemonService,
