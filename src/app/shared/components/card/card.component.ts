@@ -9,7 +9,7 @@ import { Pokemon } from '../../../core/interfaces/Pokemon';
   styleUrl: './card.component.scss',
 })
 export class CardComponent implements OnInit {
-  @Input() item!: Pack;
+  @Input() pack!: Pack;
   @Output() deleteClicked = new EventEmitter<number>();
 
   protected uniqueTypes: string[] = [];
@@ -19,36 +19,41 @@ export class CardComponent implements OnInit {
   constructor(private _router: Router) {}
 
   ngOnInit(): void {
-    this.uniqueTypes = this._getUniqueTypes(this.item);
+    this.uniqueTypes = this._getUniqueTypes(this.pack);
     this.totalTrainers = this._getTotalBySupertype('Trainer');
     this.totalPokemons = this._getTotalBySupertype('Pokémon');
   }
 
-  protected editPack(index: number) {
-    this._router.navigate(['/meu-baralho'], {
-      queryParams: { id: index },
-    });
+  /**
+     * Navega para a rota de meu baralho para editar o baralho com um dado índice.
+     * @param index - O índice do baralho a ser editado.
+  */
+  protected editPack(index: number): void {
+    this._router.navigate(['/meu-baralho'], { queryParams: { id: index } });
   }
 
-  protected deletePack(index: number) {
+  /**
+     * Emite um evento para deletar o baralho com um dado índice.
+     * @param index - O índice do baralho a ser removido.
+  */
+  protected deletePack(index: number): void {
     this.deleteClicked.emit(index);
   }
 
-  // Metódo para obter total de cartas no baralho por supertype
-  private _getTotalBySupertype(supertype: string): number {
-    return this.item.items.filter((card) => card.supertype === supertype).length
+  /**
+     * Obtém o número total de cartas no baralho que combinam o supertype indicado.
+     * @param supertype - O supertype da carta para ser somado.
+     * @returns O número total de cartas de um dado supertype no baralho.
+  */  private _getTotalBySupertype(supertype: string): number {
+    return this.pack.items.filter((card) => card.supertype === supertype).length;
   }
 
-  // Metódo para obter tipos únicos
-  private _getUniqueTypes(pack: Pack) {
-    let types: string[] = [];
-
-    pack.items.forEach((item: Pokemon) => {
-      types = types.concat(item.types);
-    });
-
-    const uniqueTypes = Array.from(new Set(types));
-
-    return uniqueTypes;
+  /**
+     * Obtém tipos únicos de cartas no baralho.
+     * @param pack - O baralho para ser extraído os tipos únicos.
+     * @returns Um array de tipos únicos no baralho.
+  */  private _getUniqueTypes(pack: Pack): string[] {
+    const allTypes = pack.items.flatMap((item: Pokemon) => item.types);
+    return Array.from(new Set(allTypes));
   }
 }
