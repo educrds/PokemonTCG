@@ -16,7 +16,8 @@ export class Util {
 
   static getCardsFromLocalStorage(): Pack[] {
     const existingCards = localStorage.getItem('cards');
-    let cardsArray: Pack[] = existingCards ? JSON.parse(existingCards) : [];
+    const cardsArray: Pack[] = existingCards ? JSON.parse(existingCards) : [];
+    
     return cardsArray;
   }
 }
