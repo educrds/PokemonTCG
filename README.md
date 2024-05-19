@@ -8,11 +8,14 @@
         
 3.  **Instale as dependências:**
     
-       Execute o seguinte comando para instalar as dependências do projeto: `npm install` 
+       Execute o seguinte comando para instalar as dependências do projeto:
+       
+        `npm install` 
         
 4.  **Execute o servidor de desenvolvimento:**
     
-    Após a instalação das dependências, execute o seguinte comando para iniciar o servidor de desenvolvimento:          
+    Após a instalação das dependências, execute o seguinte comando para iniciar o servidor de desenvolvimento:   
+           
         `ng serve` 
 
 ## Resumo
