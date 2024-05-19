@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, Signal, WritableSignal, signal } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { PokemonService } from '../../core/services/pokemon.service';
 import { Pokemon } from '../../core/interfaces/Pokemon';
@@ -7,7 +7,8 @@ import { Util } from '../../shared/utils';
 import { FormsModule } from '@angular/forms';
 import { MyPackTableComponent } from '../../shared/components/my-pack-table/my-pack-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Pack } from '../../core/interfaces/Pack';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-novo-baralho',
   standalone: true,
@@ -15,73 +16,96 @@ import { Pack } from '../../core/interfaces/Pack';
   templateUrl: './novo-baralho.component.html',
   styleUrl: './novo-baralho.component.scss',
 })
-export class NovoBaralhoComponent implements OnInit {
-  private _currentPage: number = 1;
+
+export class NovoBaralhoComponent implements OnInit, OnDestroy {
+  private _currentPage: WritableSignal<number> = signal<number>(1);
   private _id: number | null = null;
+  private _subscription!: Subscription;
 
   protected pokemonsList: Pokemon[] = [];
-  protected myPokemonList = signal<Pokemon[]>([]);
-  protected packName = signal<string>('');
+  protected myPokemonList: WritableSignal<Pokemon[]> = signal<Pokemon[]>([]);
+  protected packName: WritableSignal<string> = signal<string>('');
 
-  constructor(private _pokemonService: PokemonService, private _router: Router, private _route: ActivatedRoute) {}
+  constructor(
+    private _pokemonService: PokemonService,
+    private _router: Router,
+    private _route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this._id = +this._route.snapshot.queryParams['id'];
 
     if (this._id) {
-      const allPacks = this.getCardsFromLocalStorage();
+      const allPacks = Util.getCardsFromLocalStorage();
       const cardById = allPacks.find((card) => card.index === this._id);
-      
+
       if (cardById) {
         const { name, items } = cardById;
 
         this.packName.set(name);
-        this.myPokemonList.update(() => {
-          return [...items];
-        });
+        this.myPokemonList.set(items);
       }
     }
     this.loadPokemons();
   }
 
+  ngOnDestroy(): void {
+    if(this._subscription) this._subscription.unsubscribe();
+  }
+
+  /**
+   * Carrega a lista de Pokémons da API com base na página atual e adiciona os novos dados à lista existente.
+  */
   private loadPokemons(): void {
-    this._pokemonService
-      .getPokemons({ pageSize: 12, page: this._currentPage })
+    this._subscription = this._pokemonService
+      .getPokemons({ pageSize: 12, page: this._currentPage() })
       .subscribe({
         next: (res) => (this.pokemonsList = this.pokemonsList.concat(res.data)),
         error: () => Util.showAlert(`Erro ao carregar os pokémons`),
       });
   }
 
+  /**
+     * Adiciona um Pokémon ao baralho se as validações de quantidade máxima e mínima forem atendidas.
+     * @param pokemon - O Pokémon a ser adicionado ao baralho.
+  */
   protected addPokemonToPack(pokemon: Pokemon) {
     if (this._validateQtdPokemons(pokemon) && this._validateQtdMax()) {
-      this.myPokemonList.update((values) => {
-        return [...values, pokemon];
-      });
+      this.myPokemonList.update((values) => [...values, pokemon]);
       Util.showAlert(`Pokémon <strong>${pokemon.name}</strong> adicionado com sucesso!`);
     }
   }
 
+  
+  /**
+     * Valida se o baralho já atingiu a quantidade máxima de 60 cartas.
+     * @returns `true` se a quantidade máxima não foi atingida, caso contrário `false`.
+  */
   private _validateQtdMax(): boolean {
-    const arrayLength = this.myPokemonList().length;
-
-    if (arrayLength === 60) {
+    if (this.myPokemonList().length === 60) {
       Util.showAlert(`Limite máximo de <strong>60 cartas</strong> atingido.`);
       return false;
     }
     return true;
   }
 
+  /**
+     * Valida se o baralho possui a quantidade mínima de 24 cartas.
+     * @returns `true` se a quantidade mínima for atingida, caso contrário `false`.
+  */
   private _validateQtdMin(): boolean {
-    const arrayLength = this.myPokemonList().length;
-
-    if (arrayLength < 24) {
+    if (this.myPokemonList().length < 24) {
       Util.showAlert(`O baralho tem que possuir, no mínimo, <strong>24 cartas</strong>.`);
       return false;
     }
     return true;
   }
 
+  /**
+     * Valida se o baralho já possui 4 cartas do mesmo Pokémon.
+     * @param pokemon - O Pokémon a ser validado.
+     * @returns `true` se a quantidade de cartas do Pokémon for menor que 4, caso contrário `false`.
+  */
   private _validateQtdPokemons(pokemon: Pokemon): boolean {
     const errorMessage = `O baralho já possui <strong>4 cartas</strong> de mesmo nome: <strong>${pokemon.name}</strong>.`;
     const qtdOccurrences = this.myPokemonList().filter((item) => item.name === pokemon.name).length;
@@ -93,10 +117,12 @@ export class NovoBaralhoComponent implements OnInit {
     return true;
   }
 
+  /**
+     * Salva o baralho atual após validar se possui um nome e a quantidade mínima de cartas.
+     * Atualiza ou armazena o baralho no local storage dependendo se é uma edição ou uma criação.
+  */
   protected savePack() {
-    const packName = this.packName();
-
-    if (!packName) {
+    if (!this.packName()) {
       return Util.showAlert(`Insira um nome para o baralho.`);
     }
 
@@ -105,32 +131,33 @@ export class NovoBaralhoComponent implements OnInit {
     }
   }
 
-  private getCardsFromLocalStorage(): Pack[] {
-    const existingCards = localStorage.getItem('cards');
-    let cardsArray: Pack[] = existingCards ? JSON.parse(existingCards) : [];
-    return cardsArray;
-  }
-
+  /**
+     * Atualiza o baralho existente no local storage.
+     * Substitui os itens e o nome do baralho existente com os novos valores.
+     * Salva o baralho atualizado no local storage e retorna aos baralhos.
+  */
   private updatePackInLocalStorage(): void {
-    const packName = this.packName();
-    const cardsArray = this.getCardsFromLocalStorage();
+    const cardsArray = Util.getCardsFromLocalStorage();
     const existingPackIndex = cardsArray.findIndex((pack) => pack.index === this._id);
 
     if (existingPackIndex !== -1) {
       cardsArray[existingPackIndex].items = this.myPokemonList();
-      cardsArray[existingPackIndex].name = packName;
+      cardsArray[existingPackIndex].name = this.packName();
       localStorage.setItem('cards', JSON.stringify(cardsArray));
       Util.showAlert(`Baralho atualizado com sucesso!`);
       this.navigateToHome();
     }
   }
 
+  /**
+     * Armazena um novo baralho no local storage.
+     * Gera um índice único baseado na data atual e salva o baralho.
+  */
   private storePackInLocalStorage(): void {
-    const packName = this.packName();
     const uniqueIndex = Date.now();
-    const cardsArray = this.getCardsFromLocalStorage();
+    const cardsArray = Util.getCardsFromLocalStorage();
 
-    cardsArray.push({ name: packName, index: uniqueIndex, items: this.myPokemonList() });
+    cardsArray.push({ name: this.packName(), index: uniqueIndex, items: this.myPokemonList() });
     localStorage.setItem('cards', JSON.stringify(cardsArray));
     Util.showAlert(`Baralho inserido com sucesso!`);
     this.navigateToHome();
@@ -140,8 +167,11 @@ export class NovoBaralhoComponent implements OnInit {
     this._router.navigate(['/']);
   }
 
+  /**
+      * Carrega mais Pokémons incrementando a página atual e chamando o método de carregamento.
+  */
   protected loadMore(): void {
-    this._currentPage++;
+    this._currentPage.update((page) => ++page);
     this.loadPokemons();
   }
 }
