@@ -61,7 +61,7 @@ export class NovoBaralhoComponent implements OnInit, OnDestroy {
       .getPokemons({ pageSize: 12, page: this._currentPage() })
       .subscribe({
         next: (res) => (this.pokemonsList = this.pokemonsList.concat(res.data)),
-        error: () => Util.showAlert(`Erro ao carregar os pokémons`),
+        error: (err) => Util.showAlert(err.message),
       });
   }
 
