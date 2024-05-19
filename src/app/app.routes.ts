@@ -8,7 +8,7 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
-    path: 'novo-baralho',
+    path: 'meu-baralho',
     component: NovoBaralhoComponent,
   },
 ];
