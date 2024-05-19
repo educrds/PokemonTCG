@@ -13,26 +13,16 @@ export class InfiniteScrollDirective {
     const scrollPosition = this.getScrollPosition();
     const windowHeight = offsetHeight;
     const documentHeight = scrollHeight;
-    const scrolledToBottom = this.isScrolledToBottom(
-      scrollPosition,
-      windowHeight,
-      documentHeight
-    );
+    const scrolledToBottom = this.isScrolledToBottom(scrollPosition, windowHeight, documentHeight);
 
-    if (scrolledToBottom) {
-      this.scrolledToBottom.emit();
-    }
+    if (scrolledToBottom) this.scrolledToBottom.emit();
   }
 
   private getScrollPosition(): number {
     return document.documentElement.scrollTop || document.body.scrollTop;
   }
 
-  private isScrolledToBottom(
-    scrollPosition: number,
-    windowHeight: number,
-    documentHeight: number
-  ): boolean {
+  private isScrolledToBottom(scrollPosition: number, windowHeight: number, documentHeight: number): boolean {
     const distanceFromBottom = Math.round(scrollPosition + windowHeight);
     return distanceFromBottom >= documentHeight;
   }
