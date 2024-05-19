@@ -10,6 +10,6 @@ export class NewCardComponent {
   constructor(private _router: Router) {}
 
   protected onCardClicked(): void {
-    this._router.navigate(['/novo-baralho']);
+    this._router.navigate(['/meu-baralho']);
   }
 }

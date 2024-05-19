@@ -25,7 +25,7 @@ export class CardComponent implements OnInit {
   }
 
   protected editPack(index: number) {
-    this._router.navigate(['/novo-baralho'], {
+    this._router.navigate(['/meu-baralho'], {
       queryParams: { id: index },
     });
   }
