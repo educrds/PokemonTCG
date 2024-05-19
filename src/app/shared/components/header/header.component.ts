@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-header',
@@ -8,7 +8,7 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input() title: string = '';
-  @Input() isBackRoute: boolean = false;
+  @Input() isBackRoute?: boolean = false;
 
   constructor(private _location: Location) {}
 
