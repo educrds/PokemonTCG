@@ -9,7 +9,7 @@ type ButtonType = 'primary' | 'outline' | 'success';
 })
 export class ButtonComponent {
   @Input() label: string = '';
-  @Input() buttonType: ButtonType = 'primary';
+  @Input() buttonType?: ButtonType = 'primary';
   @Output() cardClicked = new EventEmitter<void>();
 
   protected onClick(): void {

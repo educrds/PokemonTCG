@@ -1,20 +1,17 @@
 import { Component, OnDestroy, OnInit, WritableSignal, signal } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
 import { PokemonService } from '../../core/services/pokemon.service';
 import { Pokemon } from '../../core/interfaces/Pokemon';
-import { CommonModule } from '@angular/common';
 import { Util } from '../../shared/utils';
-import { FormsModule } from '@angular/forms';
-import { MyPackTableComponent } from '../../shared/components/my-pack-table/my-pack-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { FormInputComponent } from '../../shared/components/form-input/form-input.component';
+import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-novo-baralho',
-  standalone: true,
-  imports: [SharedModule, CommonModule, FormsModule, MyPackTableComponent, FormInputComponent],
   templateUrl: './novo-baralho.component.html',
+  standalone: true,
+  imports:[SharedModule, FormsModule],
   styleUrl: './novo-baralho.component.scss',
 })
 

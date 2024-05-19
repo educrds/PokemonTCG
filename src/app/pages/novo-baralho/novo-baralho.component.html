@@ -3,8 +3,19 @@
 
   <div class="flex flex-col gap-4 mx-auto px-4 py-6 sm:px-2 lg:px-8">
     <div class="flex items-center w-full justify-between text-2xl text-gray-600 font-semibold">
-      <app-form-input [modelName]="packName()"   placeholder="Ex: batalha master..." label="Nome do baralho" />
-      <app-button label="Salvar" (cardClicked)="savePack()" />
+      <div class="flex flex-col w-1/4">
+        <label class="block text-sm text-gray-500">Nome do Baralho</label>
+        <input
+          [(ngModel)]="packName"
+          type="text"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5 focus:ring-blue-500"
+          placeholder="Ex: batalha master..."
+          required
+        />
+      </div>
+      <div class="mt-auto">
+        <app-button label="Salvar" (cardClicked)="savePack()" />
+      </div>
     </div>
     @if(myPokemonList().length){
       <app-my-pack-table [data]="myPokemonList()" />
