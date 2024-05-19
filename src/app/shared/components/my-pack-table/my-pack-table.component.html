@@ -13,7 +13,7 @@
   </igx-column>
   <igx-column
     field="name"
-    header="Nome"
+    header="Name"
     [width]="'15%'"
     dataType="string"
     [hasSummary]="true"
@@ -23,13 +23,14 @@
     field="supertype"
     header="Supertype"
     dataType="string"
+    sortable="true"
   ></igx-column>
-  <igx-column field="level" header="Level" dataType="number">
+  <igx-column field="level" header="Level" dataType="number" sortable="true">
     <ng-template igxCell let-cell="cell">
       <strong> {{ cell.row.data.level || "-" }} </strong>
     </ng-template>
   </igx-column>
-  <igx-column field="rarity" header="Rarity" dataType="string">
+  <igx-column field="rarity" header="Rarity" dataType="string" sortable="true">
     <ng-template igxCell let-cell="cell">
       <strong> {{ cell.row.data.rarity || "-" }} </strong>
     </ng-template>
@@ -43,13 +44,12 @@
   </igx-column>
   <igx-column field="weaknesses" header="Weaknesses">
     <ng-template igxCell let-cell="cell">
-      <div
-        class="flex flex-col gap-1"
-        *ngFor="let item of cell.row.data.weaknesses"
-      >
-        <span><strong>Type:</strong> {{ item.type }}</span>
-        <span><strong>Value:</strong> {{ item.value }}</span>
-      </div>
+      @for (item of cell.row.data.weaknesses; track $index) {
+        <div class="flex flex-col gap-1">
+          <span><strong>Type:</strong> {{ item.type }}</span>
+          <span><strong>Value:</strong> {{ item.value }}</span>
+        </div>
+      }
     </ng-template>
   </igx-column>
 
