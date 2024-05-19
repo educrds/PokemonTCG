@@ -19,7 +19,7 @@ export class PokemonService implements IPokemonService {
    */
   getPokemons(queryParams: QueryParams): Observable<ApiResponse<Pokemon[]>> {
     const params = new HttpParams({ fromObject: queryParams });
-    const cardsApiUrl = `${environment.apiUrl}/card`;
+    const cardsApiUrl = `${environment.apiUrl}/cards`;
 
     return this._http
       .get<ApiResponse<Pokemon[]>>(cardsApiUrl, { params })
