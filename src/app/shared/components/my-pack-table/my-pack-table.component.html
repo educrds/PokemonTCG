@@ -17,14 +17,26 @@
     [width]="'15%'"
     dataType="string"
     [hasSummary]="true"
-  ></igx-column>
-  <igx-column field="hp" header="HP" dataType="number"></igx-column>
+  >
+    <ng-template igxCell let-cell="cell">
+      <strong>{{ cell.value }}</strong>
+    </ng-template></igx-column
+  >
+  <igx-column field="hp" header="HP" dataType="number">
+    <ng-template igxCell let-cell="cell">
+      <app-chips [label]="cell.value" chipType="blue" />
+    </ng-template>
+  </igx-column>
   <igx-column
     field="supertype"
     header="Supertype"
     dataType="string"
     sortable="true"
-  ></igx-column>
+  >
+    <ng-template igxCell let-cell="cell">
+      <app-chips [label]="cell.value" />
+    </ng-template>
+  </igx-column>
   <igx-column field="level" header="Level" dataType="number" sortable="true">
     <ng-template igxCell let-cell="cell">
       <strong> {{ cell.row.data.level || "-" }} </strong>
@@ -45,10 +57,10 @@
   <igx-column field="weaknesses" header="Weaknesses">
     <ng-template igxCell let-cell="cell">
       @for (item of cell.row.data.weaknesses; track $index) {
-        <div class="flex flex-col gap-1">
-          <span><strong>Type:</strong> {{ item.type }}</span>
-          <span><strong>Value:</strong> {{ item.value }}</span>
-        </div>
+      <div class="flex flex-col gap-1">
+        <span><strong>Type:</strong> {{ item.type }}</span>
+        <span><strong>Value:</strong> {{ item.value }}</span>
+      </div>
       }
     </ng-template>
   </igx-column>
