@@ -39,13 +39,13 @@ O aplicativo oferece as seguintes funcionalidades:
 
   
 
--  **Listagem de Baralhos:**
+**Listagem de Baralhos:**
 
 - Os usuários podem visualizar uma lista de todos os baralhos criados.
 
 - Cada item da lista exibe informações como título, quantidade de cartas Pokémon e Trainer, e número de tipos únicos de cartas no baralho.
 
--  **Detalhes/Edição do Baralho:**
+**Detalhes/Edição do Baralho:**
 
 - Os usuários podem editar o nome de um baralho existente.
 
@@ -55,13 +55,13 @@ O aplicativo oferece as seguintes funcionalidades:
 
 - Os usuários podem retornar à lista de baralhos a partir desta visualização.
 
--  **Criação de Baralho:**
+**Criação de Baralho:**
 
 - Os usuários podem criar um novo baralho, fornecendo um nome para o mesmo.
 
 - Após a criação bem-sucedida, são redirecionados para a lista de baralhos.
 
--  **Exclusão de Baralho:**
+**Exclusão de Baralho:**
 
 - Os usuários podem excluir um baralho existente.
 
